@@ -32,9 +32,7 @@ public class OrderHistoryService implements OrderHistoryInter {
 
 
         session.getTransaction().commit();
-        session.close();
 
-        sessionFactory.close();
     }
 
 
