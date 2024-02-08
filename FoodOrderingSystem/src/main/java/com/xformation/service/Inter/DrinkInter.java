@@ -9,5 +9,4 @@ public interface DrinkInter {
     void getALlDrink();
 
     Drink findDrinkById(int id);
-   Drink findDrinkByName(String name);
 }
