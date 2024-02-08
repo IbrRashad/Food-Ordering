@@ -1,6 +1,7 @@
 package com.xformation.service;
 
 import com.xformation.model.Country;
+import com.xformation.model.Drink;
 import com.xformation.model.Food;
 import com.xformation.service.Inter.FoodInter;
 import com.xformation.utility.InputUtil;
@@ -8,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.Query;
 import java.util.List;
 
 public class FoodService implements FoodInter {
@@ -50,5 +52,23 @@ public class FoodService implements FoodInter {
 
         session.getTransaction().commit();
         return food;
+    }
+    @Override
+    public Food findFoodByMainCourseAndDessert(String mainCourse, String dessert) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            String hql = "FROM Food WHERE mainCourse = :mainCourse AND dessert = :dessert";
+            Query query = session.createQuery(hql);
+            query.setParameter("mainCourse", mainCourse);
+            query.setParameter("dessert", dessert);
+            query.setMaxResults(1); // Set maximum results to 1
+            return (Food) query.getSingleResult();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
     }
 }

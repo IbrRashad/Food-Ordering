@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.Query;
 import java.util.List;
 
 public class DrinkService implements DrinkInter {
@@ -43,5 +44,22 @@ public class DrinkService implements DrinkInter {
         Drink drink = session.get(Drink.class, (long) id);
         session.getTransaction().commit();
         return drink;
+    }
+
+    @Override
+    public Drink findDrinkByName(String name) {
+        Session session = null;
+        try {
+            session = sessionFactory.openSession();
+            String hql = "FROM Drink WHERE name = :drinkName";
+            Query query = session.createQuery(hql);
+            query.setParameter("drinkName", name);
+            query.setMaxResults(1); // Set maximum results to 1
+            return (Drink) query.getSingleResult();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
     }
 }
